@@ -1,7 +1,9 @@
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from '@src/app.module';
 import * as dotnev from 'dotenv';
+import { ErrorResponseDto } from '@shared/models/error-response-dto';
 
 /**
  * This is the application bootstrap run pipeline
@@ -18,7 +20,7 @@ async function bootstrap() {
     APP_SERVE,
     SWAGGER_ENDPOINT
   } = process.env;
-  
+
   // Creating a nest app
   const app = await NestFactory.create(AppModule);
 
@@ -34,6 +36,15 @@ async function bootstrap() {
   // Configuring Swagger
   const doc = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(SWAGGER_ENDPOINT, app, doc);
+
+  // Custom exception handling
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    dismissDefaultMessages: true,
+    exceptionFactory: (errors) =>
+      new BadRequestException(
+        new ErrorResponseDto(errors, 400)),
+  }));
 
   // Starting the app
   await app.listen(APP_SERVE);
