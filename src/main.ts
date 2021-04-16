@@ -1,17 +1,13 @@
-import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from '@src/app.module';
-import * as dotnev from 'dotenv';
 import { ErrorResponseDto } from '@shared/models/error-response-dto';
 
 /**
  * This is the application bootstrap run pipeline
  */
 async function bootstrap() {
-  // Enabling environment variables
-  dotnev.config();
-
   // Getting environment variables
   const {
     APP_NAME,
@@ -30,7 +26,7 @@ async function bootstrap() {
     .setDescription(APP_DESCRIPTION)
     .setVersion(APP_VERSION)
     .setTitle(APP_NAME)
-    .addBearerAuth()
+    .addBearerAuth({ type: 'http', in: 'header' }, 'token')
     .build();
 
   // Configuring Swagger
@@ -39,6 +35,7 @@ async function bootstrap() {
 
   // Custom exception handling
   app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
     transform: true,
     dismissDefaultMessages: true,
     exceptionFactory: (errors) =>
