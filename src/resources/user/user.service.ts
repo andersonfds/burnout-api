@@ -1,4 +1,3 @@
-import { ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException } from '@src/shared/exceptions/business-exception';
@@ -10,7 +9,9 @@ import { UserEntity } from './entities/user.entity';
 @Injectable()
 export class UserService {
 
-    constructor(@InjectRepository(UserEntity) private userRepository: Repository<UserEntity>) { }
+    constructor(
+        @InjectRepository(UserEntity)
+        private userRepository: Repository<UserEntity>) { }
 
     async create(userDto: CreateUserDto): Promise<UserEntity> {
         // Getting wether there is already an user with this e-mail

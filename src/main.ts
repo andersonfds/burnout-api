@@ -1,8 +1,8 @@
-import { BadRequestException, ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from '@src/app.module';
 import { ErrorResponseDto } from '@shared/models/error-response-dto';
+import { AppModule } from '@src/app.module';
 
 /**
  * This is the application bootstrap run pipeline
@@ -19,6 +19,7 @@ async function bootstrap() {
 
   // Creating a nest app
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix(APP_VERSION);
 
   // Adding swagger options
   const config = new DocumentBuilder()
@@ -26,12 +27,26 @@ async function bootstrap() {
     .setDescription(APP_DESCRIPTION)
     .setVersion(APP_VERSION)
     .setTitle(APP_NAME)
-    .addBearerAuth({ type: 'http', in: 'header' }, 'token')
+    .addTag('Auth')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+      },
+      'JWT',
+    )
     .build();
 
   // Configuring Swagger
   const doc = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup(SWAGGER_ENDPOINT, app, doc);
+  SwaggerModule.setup(SWAGGER_ENDPOINT, app, doc, {
+    customSiteTitle: APP_NAME,
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   // Custom exception handling
   app.useGlobalPipes(new ValidationPipe({
