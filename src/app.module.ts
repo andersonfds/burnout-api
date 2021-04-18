@@ -5,7 +5,6 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '@src/resources/auth/auth.module';
 import { UserModule } from './resources/user/user.module';
-import { ActivityModule } from './resources/activity/activity.module';
 
 
 @Module({
@@ -28,7 +27,6 @@ import { ActivityModule } from './resources/activity/activity.module';
     }),
     UserModule,
     AuthModule,
-    ActivityModule,
   ],
   providers: [TypeOrmModule],
   exports: [],
