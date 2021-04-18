@@ -21,11 +21,11 @@ export class UserEntity extends BaseEntity {
     password: string;
 
     @Exclude()
-    @Column({ type: 'datetime', default: () => 'current_timestamp' })
+    @Column({ type: 'timestamp', default: () => 'current_timestamp' })
     createdAt: Date;
 
     @Exclude()
-    @Column({ type: 'datetime', default: () => 'current_timestamp' })
+    @Column({ type: 'timestamp', default: () => 'current_timestamp' })
     updatedAt: Date;
 
     @Expose()
