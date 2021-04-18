@@ -13,7 +13,7 @@ async function bootstrap() {
     APP_NAME,
     APP_DESCRIPTION,
     APP_VERSION,
-    APP_SERVE,
+    PORT,
     SWAGGER_ENDPOINT
   } = process.env;
 
@@ -59,6 +59,6 @@ async function bootstrap() {
   }));
 
   // Starting the app
-  await app.listen(APP_SERVE);
+  await app.listen(PORT);
 }
 bootstrap();
