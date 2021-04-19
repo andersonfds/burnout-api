@@ -19,6 +19,7 @@ import { UserModule } from './resources/user/user.module';
         host: config.get<string>('DB_HOST'),
         port: config.get<number>('DB_PORT'),
         name: 'default',
+        schema: config.get<string>('DB_SCHEMA'),
         database: config.get<string>('DB_NAME'),
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
