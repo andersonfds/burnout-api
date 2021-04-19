@@ -5,11 +5,9 @@ export class DefaultEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Exclude()
     @Column({ type: 'timestamp', default: () => 'current_timestamp' })
     createdAt: Date;
 
-    @Exclude()
     @Column({ type: 'timestamp', default: () => 'current_timestamp' })
     updatedAt: Date;
     
