@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { UserEntity } from "@src/resources/user/entities/user.entity";
+import { ResponseUserDto } from "@src/resources/user/dto/response-user.dto";
 
 export interface TokenData {
     id: string,
@@ -7,7 +7,7 @@ export interface TokenData {
 
 export class CreateTokenDto {
     @ApiProperty()
-    user: UserEntity;
+    user: ResponseUserDto;
 
     @ApiProperty()
     accessToken: string;

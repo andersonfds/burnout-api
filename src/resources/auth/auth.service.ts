@@ -1,8 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { BusinessException } from '@src/shared/exceptions/business-exception';
 import { plainToClass } from 'class-transformer';
-import { UserEntity } from '../user/entities/user.entity';
+import { ResponseUserDto } from '../user/dto/response-user.dto';
 import { UserService } from '../user/user.service';
 import { authMessages } from './constants';
 import { CreateAuthDto } from './dto/create-auth.dto';
@@ -17,16 +17,17 @@ export class AuthService {
     ) { }
 
     async authenticate(userRequest: CreateAuthDto): Promise<CreateTokenDto> {
-        const user: UserEntity = await this.userService.findOneByEmail(userRequest.identifier);
+        const userData = await this.userService.findOneByEmail(userRequest.identifier);
 
-        if (user == null)
+        if (userData == null)
             throw new BusinessException('identifier', authMessages.unknown_email);
 
-        if (user?.validate(userRequest.password) != true)
+        if (userData?.validate(userRequest.password) != true)
             throw new BusinessException('password', authMessages.unknown_password);
 
-        const payload = <TokenData>{ id: user.id };
+        const payload = <TokenData>{ id: userData.id };
         const accessToken = this.jwtService.sign(payload);
+        const user = plainToClass(ResponseUserDto, userData);
 
         return plainToClass(CreateTokenDto, { user, accessToken });
     }

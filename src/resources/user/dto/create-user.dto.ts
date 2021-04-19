@@ -1,12 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { serverConstants } from "@src/shared/constants/serverConstants";
 import { Transform } from "class-transformer";
-import { IsAlpha, IsEmail, IsNotEmpty, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, MaxLength, MinLength } from "class-validator";
 import { userConstants } from "../constants";
 
 export class CreateUserDto {
-    @IsNotEmpty({ message: userConstants.name.invalid })
     @ApiProperty()
+    @IsNotEmpty({ message: userConstants.name.invalid })
     @Transform((fn) => fn.value?.trim())
     firstName: string;
 
