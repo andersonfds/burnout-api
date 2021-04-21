@@ -5,6 +5,7 @@ import { getManager, Like, Repository } from 'typeorm';
 import { userConstants } from './constants';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { UserRole } from './enum/user-role.enum';
 
 @Injectable()
 export class UserService {
@@ -21,6 +22,7 @@ export class UserService {
             throw new BusinessException('email', userConstants.email.inUse);
         // Creating the user into the system
         const createdUser = getManager().create(UserEntity, userDto);
+        createdUser.role = UserRole.LEAD;
         // Returning the user info
         return await createdUser.save();
     }

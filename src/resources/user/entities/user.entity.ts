@@ -1,6 +1,7 @@
 import { DefaultEntity } from '@src/shared/models/entity-base';
 import * as bcrypt from 'bcrypt';
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity } from "typeorm";
+import { UserRole } from '../enum/user-role.enum';
 
 @Entity('user')
 export class UserEntity extends DefaultEntity {
@@ -16,6 +17,9 @@ export class UserEntity extends DefaultEntity {
 
     @Column({ length: 500 })
     password: string;
+
+    @Column('enum', { enum: UserRole })
+    role: UserRole;
 
     private tempPassword: string;
 

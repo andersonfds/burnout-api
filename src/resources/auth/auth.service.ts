@@ -25,7 +25,7 @@ export class AuthService {
         if (userData?.validate(userRequest.password) != true)
             throw new BusinessException('password', authMessages.unknown_password);
 
-        const payload = <TokenData>{ id: userData.id };
+        const payload = <TokenData>{ id: userData.id, role: userData.role };
         const accessToken = this.jwtService.sign(payload);
         const user = plainToClass(ResponseUserDto, userData);
 
