@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getManager, Repository } from 'typeorm';
+import { BusinessException } from '@src/shared/exceptions/business-exception';
+import { createQueryBuilder, getConnection, getManager, Repository } from 'typeorm';
+import { TransactionService } from '../transactions/transaction.service';
+import { UserService } from '../user/user.service';
+import { activityConstants } from './constants';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { ActivityEntity } from './entities/activity.entity';
 
@@ -9,12 +13,52 @@ export class ActivityService {
 
     constructor(
         @InjectRepository(ActivityEntity)
-        private _activityRepository: Repository<ActivityEntity>
+        private _activityRepository: Repository<ActivityEntity>,
+        private _transactionService: TransactionService,
+        private _userService: UserService,
     ) { }
 
     async create(activityDto: CreateActivityDto): Promise<ActivityEntity> {
         const createdActivity = getManager().create(ActivityEntity, activityDto);
         return await createdActivity.save();
+    }
+
+    async find(): Promise<ActivityEntity[]> {
+        return await this._activityRepository.find();
+    }
+
+    async findUnlockedForUser(userId: string) {
+        return getConnection()
+            .createQueryBuilder(ActivityEntity, 'activity')
+            .leftJoinAndSelect('activity.users', 'users', 'users.id = :userId', { userId })
+            .getMany();
+    }
+
+    async unlock(activityId: string, userId: string): Promise<boolean> {
+        const activity = await this._activityRepository.findOne(activityId);
+        const user = await this._userService.findById(userId);
+        const activityUser = getConnection().createQueryBuilder()
+            .relation(ActivityEntity, 'users')
+            .of(activity);
+        try {
+            await activityUser.add(user);
+
+            const unlockPrice = -activity.unlockPrice;
+            const unlockMessage = activityConstants.unlockingLevel;
+
+            // taking the money from the user's account
+            const success = await this._transactionService.transact(unlockPrice, unlockMessage, user);
+
+            // the money could not be relocated
+            if (!success)
+                // removing in background
+                activityUser.remove(user);
+
+            // returning wether it saved or not 
+            return success;
+        } catch (error) {
+            return false;
+        }
     }
 
     /**

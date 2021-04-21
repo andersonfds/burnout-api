@@ -1,6 +1,8 @@
+import { ActivityEntity } from '@src/resources/activity/entities/activity.entity';
+import { TransactionEntity } from '@src/resources/transactions/entities/transaction.entity';
 import { DefaultEntity } from '@src/shared/models/entity-base';
 import * as bcrypt from 'bcrypt';
-import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity } from "typeorm";
+import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany } from "typeorm";
 import { UserRole } from '../enum/user-role.enum';
 
 @Entity('user')
@@ -20,6 +22,15 @@ export class UserEntity extends DefaultEntity {
 
     @Column('enum', { enum: UserRole })
     role: UserRole;
+
+    @Column('decimal', { default: 0 })
+    balance: number;
+
+    @OneToMany(() => TransactionEntity, transaction => transaction.user)
+    transactions: TransactionEntity;
+
+    @ManyToMany(() => ActivityEntity, activity => activity.users)
+    activities: ActivityEntity[];
 
     private tempPassword: string;
 

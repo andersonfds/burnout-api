@@ -5,6 +5,7 @@ import { AuthModule } from '@src/resources/auth/auth.module';
 import { UserModule } from './resources/user/user.module';
 import { ActivityModule } from './resources/activity/activity.module';
 import { StepModule } from './resources/step/step.module';
+import { TransactionModule } from './resources/transactions/transaction.module';
 
 
 @Module({
@@ -31,6 +32,7 @@ import { StepModule } from './resources/step/step.module';
     AuthModule,
     ActivityModule,
     StepModule,
+    TransactionModule,
   ],
   providers: [TypeOrmModule],
   exports: [],
