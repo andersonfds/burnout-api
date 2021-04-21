@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '@src/resources/auth/auth.module';
 import { UserModule } from './resources/user/user.module';
+import { ActivityModule } from './resources/activity/activity.module';
+import { StepModule } from './resources/step/step.module';
 
 
 @Module({
@@ -27,6 +29,8 @@ import { UserModule } from './resources/user/user.module';
     }),
     UserModule,
     AuthModule,
+    ActivityModule,
+    StepModule,
   ],
   providers: [TypeOrmModule],
   exports: [],

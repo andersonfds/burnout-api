@@ -2,7 +2,7 @@ import { DefaultEntity } from '@src/shared/models/entity-base';
 import * as bcrypt from 'bcrypt';
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity } from "typeorm";
 
-@Entity({ name: 'user' })
+@Entity('user')
 export class UserEntity extends DefaultEntity {
 
     @Column({ length: 40 })
