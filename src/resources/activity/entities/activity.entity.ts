@@ -17,6 +17,15 @@ export class ActivityEntity extends DefaultEntity {
     @Column('decimal', { default: 0 })
     price: number;
 
+    @Column({ length: 45, nullable: true })
+    levelName: string;
+
+    @Column({ length: 45, nullable: true })
+    levelTag: string;
+
+    @Column({ length: 100, nullable: true })
+    thumbnail: string;
+
     @Column('decimal', { default: 0 })
     unlockPrice: number;
 

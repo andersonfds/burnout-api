@@ -25,4 +25,16 @@ export class ResponseActivityAllDto {
     @Transform(({ value }) => value.length > 0)
     @Expose({ name: 'users' })
     unlocked: boolean;
+
+    @Expose()
+    @ApiProperty()
+    levelName: string;
+
+    @Expose()
+    @ApiProperty()
+    levelTag: string;
+
+    @Expose()
+    @ApiProperty()
+    thumbnail: string;
 }
