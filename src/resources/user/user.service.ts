@@ -35,4 +35,12 @@ export class UserService {
         return this.userRepository.findOne({ where: { email: Like(email) } });
     }
 
+    async getBalance(userId: string): Promise<number> {
+        const result = await getManager().createQueryBuilder(UserEntity, 'user')
+            .where('user.id = :userId', { userId })
+            .select('balance')
+            .getRawOne();
+        return result?.balance;
+    }
+
 }

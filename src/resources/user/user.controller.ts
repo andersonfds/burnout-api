@@ -31,4 +31,12 @@ export class UserController {
     return plainToClass(ResponseUserDto, classToPlain(user));
   }
 
+  @Get('balance')
+  @ApiBearerAuth('JWT')
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: Number })
+  async getBalance(@CurrentUser() data: TokenData): Promise<number> {
+    return await this.userService.getBalance(data.id);
+  }
+
 }
