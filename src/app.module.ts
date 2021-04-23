@@ -6,6 +6,7 @@ import { UserModule } from './resources/user/user.module';
 import { ActivityModule } from './resources/activity/activity.module';
 import { StepModule } from './resources/step/step.module';
 import { TransactionModule } from './resources/transactions/transaction.module';
+import { FcmModule } from './shared/modules/fcm/fcm.module';
 
 
 @Module({
@@ -33,6 +34,7 @@ import { TransactionModule } from './resources/transactions/transaction.module';
     ActivityModule,
     StepModule,
     TransactionModule,
+    FcmModule,
   ],
   providers: [TypeOrmModule],
   exports: [],

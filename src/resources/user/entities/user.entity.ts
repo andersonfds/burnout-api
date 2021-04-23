@@ -23,6 +23,9 @@ export class UserEntity extends DefaultEntity {
     @Column('enum', { enum: UserRole })
     role: UserRole;
 
+    @Column({ nullable: true, length: 255 })
+    notificationId: string;
+
     @Column('decimal', { default: 0 })
     balance: number;
 

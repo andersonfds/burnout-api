@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { BusinessException } from '@src/shared/exceptions/business-exception';
+import { FcmService } from '@src/shared/modules/fcm/fcm.service';
 import { plainToClass } from 'class-transformer';
 import { ResponseUserDto } from '../user/dto/response-user.dto';
 import { UserService } from '../user/user.service';
@@ -14,6 +15,7 @@ export class AuthService {
     constructor(
         private userService: UserService,
         private jwtService: JwtService,
+        private fcmService: FcmService,
     ) { }
 
     async authenticate(userRequest: CreateAuthDto): Promise<CreateTokenDto> {
@@ -28,6 +30,12 @@ export class AuthService {
         const payload = <TokenData>{ id: userData.id, role: userData.role };
         const accessToken = this.jwtService.sign(payload);
         const user = plainToClass(ResponseUserDto, userData);
+
+        console.log('chegou aqui: ', userRequest);
+        if (userRequest.deviceId) {
+            console.log('inserindo no firebase');
+            this.fcmService.register(userData, userRequest.deviceId);
+        }
 
         return plainToClass(CreateTokenDto, { user, accessToken });
     }

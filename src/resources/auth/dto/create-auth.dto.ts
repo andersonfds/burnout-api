@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty } from "class-validator";
+import { IsDefined, IsEmail, IsNotEmpty } from "class-validator";
 import { authMessages } from "../constants";
 
 export class CreateAuthDto {
@@ -10,4 +10,8 @@ export class CreateAuthDto {
     @ApiProperty()
     @IsNotEmpty({ message: authMessages.invalid_password })
     password: string;
+
+    @IsDefined()
+    @ApiProperty()
+    deviceId: string;
 }
