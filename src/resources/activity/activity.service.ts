@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException } from '@src/shared/exceptions/business-exception';
 import { createQueryBuilder, getConnection, getManager, Repository } from 'typeorm';
+import { StepEntity } from '../step/entities/step.entity';
+import { StepService } from '../step/step.service';
 import { TransactionService } from '../transactions/transaction.service';
 import { UserService } from '../user/user.service';
 import { activityConstants } from './constants';
@@ -13,9 +15,9 @@ export class ActivityService {
 
     constructor(
         @InjectRepository(ActivityEntity)
-        private _activityRepository: Repository<ActivityEntity>,
-        private _transactionService: TransactionService,
-        private _userService: UserService,
+        private readonly _activityRepository: Repository<ActivityEntity>,
+        private readonly _transactionService: TransactionService,
+        private readonly _userService: UserService,
     ) { }
 
     async create(activityDto: CreateActivityDto): Promise<ActivityEntity> {
