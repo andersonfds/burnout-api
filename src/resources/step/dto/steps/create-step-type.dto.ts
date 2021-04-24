@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsDefined, IsNotEmpty, IsString, ValidateNested } from "class-validator";
 
 export class StepTypeText {
     @ApiProperty()
@@ -9,6 +9,14 @@ export class StepTypeText {
     @ApiProperty()
     @IsNotEmpty()
     description: string;
+
+    @ApiProperty()
+    @IsDefined()
+    onDeny: string;
+
+    @ApiProperty()
+    @IsDefined()
+    onAccept: string;
 }
 
 export class StepTypeOptions {
