@@ -115,6 +115,8 @@ export class FcmService {
             } catch (error) {
                 return false;
             }
+        } else {
+            return true;
         }
         return false;
     }
@@ -138,7 +140,7 @@ export class FcmService {
                 registration_ids: [token],
             };
 
-            await this.http.post('notification', { data }).toPromise();
+            await this.http.post('notification', data).toPromise();
             return true;
         } catch (e) {
             return false;
