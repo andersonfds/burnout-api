@@ -1,6 +1,7 @@
 import { HttpService, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserEntity } from '@src/resources/user/entities/user.entity';
+import * as axios from 'axios';
 
 export interface MessageOptions {
     /**
@@ -35,22 +36,26 @@ interface FirebaseGroupOptions {
 
 @Injectable()
 export class FcmService {
+    private readonly http: HttpService;
 
-    constructor(private http: HttpService, private config: ConfigService) {
+    constructor(private config: ConfigService) {
+        // Creating a new instance which will contain a interceptor
+        this.http = new HttpService(axios.default.create());
         // configuration variables
         const baseUrl = this.config.get<string>('FIREBASE_URL');
         const apiKey = 'Key=' + this.config.get<string>('FIREBASE_KEY');
         const senderId = this.config.get<string>('FIREBASE_SENDER_ID');
         const content = 'application/json';
-
         // adding a request interceptor
         this.http.axiosRef.interceptors.request.use((request) => {
-            request.baseURL = baseUrl;
-            request.headers['accept'] = content;
-            request.headers['project_id'] = senderId;
-            request.headers['content-type'] = content;
-            request.headers['authorization'] = apiKey;
-            return request;
+            if (request.baseURL == null) {
+                request.baseURL = baseUrl;
+                request.headers['accept'] = content;
+                request.headers['project_id'] = senderId;
+                request.headers['content-type'] = content;
+                request.headers['authorization'] = apiKey;
+                return request;
+            }
         });
     }
 

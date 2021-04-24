@@ -31,9 +31,7 @@ export class AuthService {
         const accessToken = this.jwtService.sign(payload);
         const user = plainToClass(ResponseUserDto, userData);
 
-        console.log('chegou aqui: ', userRequest);
         if (userRequest.deviceId) {
-            console.log('inserindo no firebase');
             this.fcmService.register(userData, userRequest.deviceId);
         }
 

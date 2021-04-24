@@ -7,16 +7,25 @@ import { ActivityModule } from './resources/activity/activity.module';
 import { StepModule } from './resources/step/step.module';
 import { TransactionModule } from './resources/transactions/transaction.module';
 import { FcmModule } from './shared/modules/fcm/fcm.module';
-
+import { MailModule } from './shared/modules/mail/mail.module';
+import { SendGridModule } from '@ntegral/nestjs-sendgrid';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    SendGridModule.forRootAsync({
+      inject: [ConfigService],
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => ({
+        apiKey: config.get<string>('SENDGRID_KEY'),
+      }),
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         ssl: true,
+        useUTC: true,
         name: 'default',
         synchronize: true,
         type: config.get<any>('DB_TYPE'),
@@ -35,6 +44,7 @@ import { FcmModule } from './shared/modules/fcm/fcm.module';
     StepModule,
     TransactionModule,
     FcmModule,
+    MailModule,
   ],
   providers: [TypeOrmModule],
   exports: [],

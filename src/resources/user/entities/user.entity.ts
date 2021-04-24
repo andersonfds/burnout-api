@@ -29,6 +29,15 @@ export class UserEntity extends DefaultEntity {
     @Column('decimal', { default: 0 })
     balance: number;
 
+    @Column({ length: 4, nullable: true })
+    verificationCode: string;
+
+    @Column('timestamp', { nullable: true })
+    verificationCodeValid: Date;
+
+    @Column('bool', { default: false })
+    verified: boolean;
+
     @OneToMany(() => TransactionEntity, transaction => transaction.user)
     transactions: TransactionEntity;
 
@@ -45,6 +54,10 @@ export class UserEntity extends DefaultEntity {
     @BeforeInsert()
     @BeforeUpdate()
     hashPassword(): void {
+        // Normalizing email
+        this.email = this.email.toLowerCase();
+
+        // If the password is different we should generate another hash
         if (this.tempPassword != this.password)
             this.password = bcrypt.hashSync(this.password, 10);
     }
