@@ -69,7 +69,7 @@ export class FcmService {
     async notifyChannel(user: UserEntity, options: MessageOptions) {
         const data = { to: user.notificationId, data: options };
         try {
-            await this.http.post('notification', { data }).toPromise();
+            await this.http.post('send', data).toPromise();
             return true;
         } catch (e) {
             return false;
@@ -85,7 +85,7 @@ export class FcmService {
     async notify(user: UserEntity, options: NotificationOptions): Promise<boolean> {
         const data = { to: user.notificationId, notification: options };
         try {
-            await this.http.post('notification', { data }).toPromise();
+            await this.http.post('send', data).toPromise();
             return true;
         } catch (e) {
             return false;
