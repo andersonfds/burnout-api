@@ -1,4 +1,4 @@
-import { StepTypeOptions, StepTypeText } from "./steps/create-step-type.dto";
+import { StepTypeBurnout, StepTypeOptions, StepTypeText } from "./steps/create-step-type.dto";
 
 export interface StepTypeMap {
     name: string;
@@ -13,5 +13,9 @@ export const dataTypesMap: StepTypeMap[] = [
     {
         name: 'options',
         type: StepTypeOptions,
+    },
+    {
+        name: 'burnout',
+        type: StepTypeBurnout,
     },
 ];

@@ -20,6 +20,16 @@ export class StepTypeText {
     onAccept: string;
 }
 
+export class StepTypeBurnout {
+    @ApiProperty()
+    @IsDefined()
+    onAccept: string;
+
+    @ApiProperty()
+    @IsDefined()
+    question: string;
+}
+
 export class OptionItem {
     @ApiProperty()
     value: string;
