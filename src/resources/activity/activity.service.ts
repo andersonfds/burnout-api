@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException } from '@src/shared/exceptions/business-exception';
+import { FcmService } from '@src/shared/modules/fcm/fcm.service';
 import { createQueryBuilder, getConnection, getManager, Repository } from 'typeorm';
 import { StepEntity } from '../step/entities/step.entity';
 import { StepService } from '../step/step.service';
@@ -18,6 +19,7 @@ export class ActivityService {
         private readonly _activityRepository: Repository<ActivityEntity>,
         private readonly _transactionService: TransactionService,
         private readonly _userService: UserService,
+        private readonly _fcmService: FcmService,
     ) { }
 
     async create(activityDto: CreateActivityDto): Promise<ActivityEntity> {
@@ -55,7 +57,11 @@ export class ActivityService {
             if (!success)
                 // removing in background
                 activityUser.remove(user);
-
+            else
+                this._fcmService.notifyChannel(user, {
+                    action: 'MONEY_VALUE_CHANGED',
+                    data: user.balance,
+                });
             // returning wether it saved or not 
             return success;
         } catch (error) {

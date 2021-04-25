@@ -52,6 +52,7 @@ export class UserService {
         if (valid) {
             user.verified = true;
             user.role = UserRole.CLIENT;
+            user.balance = 200;
             user.verificationCodeValid = moment().toDate();
             await user.save();
         }

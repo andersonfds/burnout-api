@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { FcmModule } from '@src/shared/modules/fcm/fcm.module';
 import { TransactionModule } from '../transactions/transaction.module';
 import { UserModule } from '../user/user.module';
 import { ActivityController } from './activity.controller';
@@ -10,6 +11,7 @@ import { ActivityEntity } from './entities/activity.entity';
   imports: [
     UserModule,
     TransactionModule,
+    FcmModule,
     TypeOrmModule.forFeature([ActivityEntity])
   ],
   controllers: [ActivityController],
