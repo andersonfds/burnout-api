@@ -25,6 +25,9 @@ export class ResponseUserDto {
     }
 
     @Expose()
+    verified: boolean;
+
+    @Expose()
     get initials(): string {
         return `${this.firstName[0]}${this.lastName[0]}`.toUpperCase();
     }

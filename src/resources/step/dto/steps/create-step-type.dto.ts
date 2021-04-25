@@ -34,4 +34,8 @@ export class StepTypeOptions {
     @ValidateNested({ each: true })
     @Type(() => OptionItem)
     options: OptionItem[];
+
+    @ApiProperty()
+    @IsNotEmpty()
+    mode: string;
 }
